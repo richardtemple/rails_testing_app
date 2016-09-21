@@ -1,8 +1,37 @@
 require 'rails_helper'
 
 RSpec.describe HighScore, type: :model do
+  let(:empty_high_score) {HighScore.new}
+  let(:valid_high_score) {HighScore.new({game: "big game", score: 44})}
   it "is able to create an instance" do
-    high_score = HighScore.new
-    expect(high_score).to not_be_nil
+    expect(empty_high_score).to_not be_nil
+  end
+
+  it "will fail on save with empty values" do
+    expect {empty_high_score.save!}.to raise_error(ActiveRecord::RecordInvalid)
+  end
+
+  it "will save with valid data" do
+    valid_high_score.save!
+    loaded_score = HighScore.find(valid_high_score.id)
+    expect(valid_high_score.score).to eq(44)
+  end
+
+  it "will allow for compound matchers" do
+    expect([valid_high_score.game, valid_high_score.score])
+      .to contain_exactly("big game", 44)
+  end
+
+  it "will reset with each it method when changing values on a let" do
+    valid_high_score.score = 77
+    expect(valid_high_score.score).to eq(77)
+  end
+
+  it "doesnt fail even though set to 77 in different test" do
+    expect(valid_high_score.score).to eq(44)
+  end
+
+  it "uses be_ to check for booleans" do
+    expect(valid_high_score).to be_complete
   end
 end
