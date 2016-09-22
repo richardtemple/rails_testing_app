@@ -3,8 +3,14 @@ require 'rails_helper'
 RSpec.describe HighScore, type: :model do
   let(:empty_high_score) {HighScore.new}
   let(:valid_high_score) {HighScore.new({game: "big game", score: 44})}
+
+  before(:example) do
+    valid_high_score.level = 10
+  end
+
   it "is able to create an instance" do
     expect(empty_high_score).to_not be_nil
+    expect(empty_high_score.level).to eq(nil)
   end
 
   it "will fail on save with empty values" do
@@ -15,6 +21,7 @@ RSpec.describe HighScore, type: :model do
     valid_high_score.save!
     loaded_score = HighScore.find(valid_high_score.id)
     expect(valid_high_score.score).to eq(44)
+    expect(valid_high_score.level).to eq(10)
   end
 
   it "will allow for compound matchers" do
@@ -33,5 +40,10 @@ RSpec.describe HighScore, type: :model do
 
   it "uses be_ to check for booleans" do
     expect(valid_high_score).to be_complete
+  end
+
+  it "stores the date of high score correctly" do
+    valid_high_score.date_of_high_score = 1.day.ago
+    expect(valid_high_score.date_of_high_score).to be_within(2.days).of(Date.today)
   end
 end

@@ -4,4 +4,5 @@ class HighScore < ActiveRecord::Base
   def complete?
     true
   end
+
 end
