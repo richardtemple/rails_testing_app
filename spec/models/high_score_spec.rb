@@ -46,4 +46,11 @@ RSpec.describe HighScore, type: :model do
     valid_high_score.date_of_high_score = 1.day.ago
     expect(valid_high_score.date_of_high_score).to be_within(2.days).of(Date.today)
   end
+
+  it "will sum a bogus collection of scores" do
+    expect(valid_high_score.play_with_collection_of_scores).to eq(75)
+  end
+  it "will sum a bogus collection of scores 2" do
+    expect(valid_high_score.play_with_collection_of_scores_2).to eq(3)
+  end
 end
