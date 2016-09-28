@@ -157,4 +157,11 @@ RSpec.describe HighScoresController, type: :controller do
     end
   end
 
+  describe "POST create" do
+    it "creates a high score" do
+      post :create, high_score: { game: "controller test", score: 12 }
+      expect(response).to redirect_to(HighScore.last)
+      expect(assigns(:high_score).game).to eq("controller test")
+    end
+  end
 end
